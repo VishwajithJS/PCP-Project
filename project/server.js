@@ -1,8 +1,12 @@
 require("dotenv").config()
+
 const express = require("express")
 const cors = require("cors")
 
 const connectDB = require("./config/db")
+
+const authRoutes = require("./routes/authRoutes")
+const articleRoutes = require("./routes/articleRoutes")
 
 const app = express()
 
@@ -14,6 +18,9 @@ connectDB()
 app.get("/", (req, res) => {
     res.send("Knowledge Base API Running")
 })
+
+app.use("/api/auth", authRoutes)
+app.use("/api/articles", articleRoutes)
 
 const PORT = process.env.PORT || 5000
 
