@@ -5,32 +5,51 @@ import Dashboard from "./pages/Dashboard"
 import Admin from "./pages/Admin"
 import Articles from "./pages/Articles"
 
-import Navbar from "./components/Navbar"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Layout from "./components/Layout"
 
 function App() {
   return (
     <Router>
 
-      <Navbar />
-
       <Routes>
 
+        {/* Public */}
         <Route path="/" element={<Login />} />
 
-        <Route path="/dashboard" element={
-          <ProtectedRoute role="USER">
-            <Dashboard />
-          </ProtectedRoute>
-        } />
+        {/* USER */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute role="USER">
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/admin" element={
-          <ProtectedRoute role="ADMIN">
-            <Admin />
-          </ProtectedRoute>
-        } />
+        {/* ADMIN */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute role="ADMIN">
+              <Layout>
+                <Admin />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/articles" element={<Articles />} />
+        {/* PUBLIC ARTICLES */}
+        <Route
+          path="/articles"
+          element={
+            <Layout>
+              <Articles />
+            </Layout>
+          }
+        />
 
       </Routes>
 
