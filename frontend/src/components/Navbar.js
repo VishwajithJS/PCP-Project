@@ -15,31 +15,25 @@ function Navbar() {
         <div style={{
             display: "flex",
             justifyContent: "space-between",
-            padding: "10px 20px",
+            padding: "15px 30px",
             background: "#1e3c72",
             color: "white"
         }}>
-
-            <h3>KnowledgeBase</h3>
+            <h2>📚 KnowledgeBase</h2>
 
             <div>
-
                 <Link to="/articles" style={{ color: "white", marginRight: "15px" }}>Articles</Link>
 
-                {user && user.role === "USER" && (
+                {user?.role === "USER" && (
                     <Link to="/dashboard" style={{ color: "white", marginRight: "15px" }}>Dashboard</Link>
                 )}
 
-                {user && user.role === "ADMIN" && (
+                {user?.role === "ADMIN" && (
                     <Link to="/admin" style={{ color: "white", marginRight: "15px" }}>Admin</Link>
                 )}
 
-                {user && (
-                    <button onClick={logout}>Logout</button>
-                )}
-
+                {user && <button onClick={logout}>Logout</button>}
             </div>
-
         </div>
     )
 }

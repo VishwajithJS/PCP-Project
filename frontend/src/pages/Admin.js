@@ -34,15 +34,33 @@ function Admin() {
     }
 
     return (
-        <div style={{ textAlign: "center" }}>
-            <h2>Admin Panel</h2>
+        <div style={{ padding: "20px" }}>
+            <h2 style={{ textAlign: "center" }}>Admin Panel</h2>
 
             {articles.map(a => (
-                <div key={a._id}>
-                    <h4>{a.title}</h4>
+                <div key={a._id} style={{
+                    background: "white",
+                    padding: "15px",
+                    margin: "10px",
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
+                }}>
+                    <h3>{a.title}</h3>
                     <p>{a.content}</p>
-                    <button onClick={() => approve(a._id)}>Approve</button>
-                    <button onClick={() => reject(a._id)}>Reject</button>
+
+                    <button
+                        onClick={() => approve(a._id)}
+                        style={{ marginRight: "10px", padding: "6px 12px" }}
+                    >
+                        Approve
+                    </button>
+
+                    <button
+                        onClick={() => reject(a._id)}
+                        style={{ padding: "6px 12px" }}
+                    >
+                        Reject
+                    </button>
                 </div>
             ))}
         </div>
