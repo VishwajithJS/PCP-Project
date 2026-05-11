@@ -30,107 +30,96 @@ function Admin() {
 
     useEffect(() => {
         fetchPending()
-        //eslint-disable-next-line
     }, [])
 
-    const approve = async (id) => {
+    const approveArticle = async (id) => {
 
-        await fetch(
-            `https://pcp-project.onrender.com/api/articles/approve/${id}${id}`,
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${token}`
+        try {
+
+            await fetch(
+                `https://pcp-project.onrender.com/api/articles/approve/${id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            }
-        )
+            )
 
-        fetchPending()
+            fetchPending()
+
+        } catch (err) {
+            console.log(err)
+        }
     }
 
-    const reject = async (id) => {
+    const rejectArticle = async (id) => {
 
-        await fetch(
-            `https://pcp-project.onrender.com/api/articles/reject/${id}${id}`,
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${token}`
+        try {
+
+            await fetch(
+                `https://pcp-project.onrender.com/api/articles/reject/${id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-            }
-        )
+            )
 
-        fetchPending()
+            fetchPending()
+
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (
 
-        <div>
+        <div className="admin-page">
 
             <div className="admin-header">
-
-                <h1 className="admin-title">
-                    Admin Approval Panel
-                </h1>
-
-                <p className="admin-subtitle">
-                    Review and manage submitted medical articles
-                </p>
-
+                <h1>Admin Dashboard</h1>
+                <p>Review submitted medical articles</p>
             </div>
 
-            {articles.length === 0 ? (
+            <div className="admin-grid">
 
-                <div className="empty-box">
-                    No pending articles
-                </div>
+                {articles.map((article) => (
 
-            ) : (
+                    <div className="admin-card" key={article._id}>
 
-                <div className="admin-grid">
+                        <div className="status-badge">
+                            Pending Review
+                        </div>
 
-                    {articles.map((a) => (
+                        <h2>{article.title}</h2>
 
-                        <div
-                            key={a._id}
-                            className="admin-card"
-                        >
+                        <p>{article.content}</p>
 
-                            <div className="article-badge">
-                                Pending Review
-                            </div>
+                        <div className="admin-buttons">
 
-                            <h2 className="article-title">
-                                {a.title}
-                            </h2>
+                            <button
+                                className="approve-btn"
+                                onClick={() => approveArticle(article._id)}
+                            >
+                                ✅ Approve
+                            </button>
 
-                            <p className="article-content">
-                                {a.content}
-                            </p>
-
-                            <div className="admin-actions">
-
-                                <button
-                                    className="approve-btn"
-                                    onClick={() => approve(a._id)}
-                                >
-                                    ✅ Approve
-                                </button>
-
-                                <button
-                                    className="reject-btn"
-                                    onClick={() => reject(a._id)}
-                                >
-                                    ❌ Reject
-                                </button>
-
-                            </div>
+                            <button
+                                className="reject-btn"
+                                onClick={() => rejectArticle(article._id)}
+                            >
+                                ❌ Reject
+                            </button>
 
                         </div>
-                    ))}
 
-                </div>
-            )}
+                    </div>
+
+                ))}
+
+            </div>
 
         </div>
     )
