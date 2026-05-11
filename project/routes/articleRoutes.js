@@ -1,5 +1,7 @@
 const express = require("express")
 
+const router = express.Router()
+
 const {
     createArticle,
     getApprovedArticles,
@@ -11,16 +13,15 @@ const {
 const authMiddleware = require("../middleware/authMiddleware")
 const roleMiddleware = require("../middleware/roleMiddleware")
 
-const router = express.Router()
-
 router.post(
     "/",
     authMiddleware,
+    roleMiddleware("CONTRIBUTOR"),
     createArticle
 )
 
 router.get(
-    "/approved",
+    "/",
     getApprovedArticles
 )
 
