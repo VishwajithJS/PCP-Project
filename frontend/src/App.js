@@ -14,14 +14,14 @@ function App() {
 
       <Routes>
 
-        {/* Public */}
+        {/* LOGIN — NO LAYOUT */}
         <Route path="/" element={<Login />} />
 
-        {/* USER */}
+        {/* CONTRIBUTOR */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute role="USER">
+            <ProtectedRoute role="CONTRIBUTOR">
               <Layout>
                 <Dashboard />
               </Layout>
@@ -41,7 +41,7 @@ function App() {
           }
         />
 
-        {/* PUBLIC ARTICLES */}
+        {/* ARTICLES (PUBLIC but inside layout) */}
         <Route
           path="/articles"
           element={

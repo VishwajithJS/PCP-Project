@@ -1,4 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useState } from "react"
+import "../App.css"
 
 function Admin() {
 
@@ -6,11 +9,17 @@ function Admin() {
     const token = localStorage.getItem("token")
 
     const fetchPending = async () => {
-        const res = await fetch("http://localhost:5000/api/articles/pending", {
-            headers: { "Authorization": `Bearer ${token}` }
-        })
-        const data = await res.json()
-        setArticles(data)
+        try {
+            const res = await fetch("http://localhost:5000/api/articles/pending", {
+                headers: { "Authorization": `Bearer ${token}` }
+            })
+
+            const data = await res.json()
+            setArticles(data)
+
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     useEffect(() => {
@@ -18,51 +27,66 @@ function Admin() {
     }, [])
 
     const approve = async (id) => {
+
         await fetch(`http://localhost:5000/api/articles/approve/${id}`, {
             method: "PUT",
-            headers: { "Authorization": `Bearer ${token}` }
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         })
+
         fetchPending()
     }
 
     const reject = async (id) => {
+
         await fetch(`http://localhost:5000/api/articles/reject/${id}`, {
             method: "PUT",
-            headers: { "Authorization": `Bearer ${token}` }
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         })
+
         fetchPending()
     }
 
     return (
-        <div style={{ padding: "20px" }}>
-            <h2 style={{ textAlign: "center" }}>Admin Panel</h2>
+
+        <div>
+
+            <h2>Admin Panel</h2>
+
+            {articles.length === 0 && (
+                <p>No pending articles</p>
+            )}
 
             {articles.map(a => (
-                <div key={a._id} style={{
-                    background: "white",
-                    padding: "15px",
-                    margin: "10px",
-                    borderRadius: "10px",
-                    boxShadow: "0 2px 10px rgba(0,0,0,0.1)"
-                }}>
+
+                <div key={a._id} className="card">
+
                     <h3>{a.title}</h3>
+
                     <p>{a.content}</p>
 
                     <button
+                        className="button success"
                         onClick={() => approve(a._id)}
-                        style={{ marginRight: "10px", padding: "6px 12px" }}
                     >
                         Approve
                     </button>
 
                     <button
+                        className="button danger"
                         onClick={() => reject(a._id)}
-                        style={{ padding: "6px 12px" }}
+                        style={{ marginLeft: "10px" }}
                     >
                         Reject
                     </button>
+
                 </div>
+
             ))}
+
         </div>
     )
 }

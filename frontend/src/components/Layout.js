@@ -1,49 +1,43 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { getUser } from "../utils/auth"
+import "../App.css"
 
 function Layout({ children }) {
 
     const user = getUser()
+    const navigate = useNavigate()
+
+    const logout = () => {
+        localStorage.removeItem("token")
+        navigate("/")
+    }
 
     return (
-        <div style={{ display: "flex", height: "100vh" }}>
+        <div className="layout">
 
-            {/* Sidebar */}
-            <div style={{
-                width: "220px",
-                background: "#1e3c72",
-                color: "white",
-                padding: "20px"
-            }}>
-                <h2>📚 KB</h2>
+            <div className="sidebar">
 
-                <div style={{ marginTop: "30px" }}>
+                <div>
+                    <div className="logo">🏥 MedKB</div>
 
-                    <Link to="/articles" style={{ display: "block", color: "white", marginBottom: "15px" }}>
-                        🌍 Articles
-                    </Link>
+                    <Link to="/articles" className="nav-link">Articles</Link>
 
-                    {user?.role === "USER" && (
-                        <Link to="/dashboard" style={{ display: "block", color: "white", marginBottom: "15px" }}>
-                            📝 Create
-                        </Link>
+                    {user?.role === "CONTRIBUTOR" && (
+                        <Link to="/dashboard" className="nav-link">Submit</Link>
                     )}
 
                     {user?.role === "ADMIN" && (
-                        <Link to="/admin" style={{ display: "block", color: "white", marginBottom: "15px" }}>
-                            ⚙️ Admin
-                        </Link>
+                        <Link to="/admin" className="nav-link">Admin Panel</Link>
                     )}
-
                 </div>
+
+                <button className="logout-btn" onClick={logout}>
+                    Logout
+                </button>
+
             </div>
 
-            {/* Content */}
-            <div style={{
-                flex: 1,
-                padding: "20px",
-                background: "#f5f7fa"
-            }}>
+            <div className="content">
                 {children}
             </div>
 

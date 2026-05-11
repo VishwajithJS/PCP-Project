@@ -1,38 +1,150 @@
-.App {
-  text-align: center;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f7fb;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Layout */
+.layout {
+  display: flex;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/* Sidebar (🔥 FIXED + FLOATING + SMALLER) */
+.sidebar {
+  width: 200px;
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background: #0f172a;
+  color: white;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  height: calc(100vh - 20px);
+  margin: 10px;
+
+  border-radius: 12px;
+
+  padding: 20px;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
+
+  overflow-y: auto;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Logo */
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* Navigation */
+.nav-link {
+  display: block;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #cbd5e1;
+}
+
+.nav-link:hover {
+  background: #1e293b;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Logout */
+.logout-btn {
+  padding: 10px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+
+  margin-bottom: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Content */
+.content {
+  margin-left: 230px;
+  padding: 30px;
+  width: calc(100% - 230px);
+}
+
+/* Headings */
+.content h2 {
+  margin-top: 0;
+}
+
+/* Cards */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  gap: 20px;
+}
+
+.stat-box {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.stat-title {
+  font-size: 14px;
+  color: gray;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Buttons */
+.button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.primary {
+  background: #2563eb;
+  color: white;
+}
+
+.success {
+  background: #22c55e;
+  color: white;
+}
+
+.danger {
+  background: #ef4444;
+  color: white;
 }
