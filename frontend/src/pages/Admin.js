@@ -1,23 +1,14 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 
 function Admin() {
 
     const [articles, setArticles] = useState([])
 
-    const token = localStorage.getItem("token")
-
-    const fetchPending = async () => {
+    const fetchPending = useCallback(async () => {
 
         try {
 
-            const res = await fetch(
-                "https://pcp-project.onrender.com/api/articles/pending",
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
+            const res = await fetch("https://pcp-project.onrender.com/api/articles/pending")
 
             const data = await res.json()
 
@@ -27,127 +18,28 @@ function Admin() {
 
             console.log(err)
         }
-    }
+
+    }, [])
 
     useEffect(() => {
 
         fetchPending()
 
-    }, [])
-
-    const approveArticle = async (id) => {
-
-        try {
-
-            const res = await fetch(
-                `https://pcp-project.onrender.com/api/articles/approve/${id}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
-
-            const data = await res.json()
-
-            console.log(data)
-
-            fetchPending()
-
-        } catch (err) {
-
-            console.log(err)
-        }
-    }
-
-    const rejectArticle = async (id) => {
-
-        try {
-
-            const res = await fetch(
-                `https://pcp-project.onrender.com/api/articles/reject/${id}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
-
-            const data = await res.json()
-
-            console.log(data)
-
-            fetchPending()
-
-        } catch (err) {
-
-            console.log(err)
-        }
-    }
+    }, [fetchPending])
 
     return (
 
-        <div className="admin-page">
+        <div>
+            <h1>Admin Panel</h1>
 
-            <div className="admin-header">
+            {articles.map((article) => (
 
-                <h1>
-                    Admin Dashboard
-                </h1>
+                <div key={article._id}>
+                    <h2>{article.title}</h2>
+                    <p>{article.content}</p>
+                </div>
 
-                <p>
-                    Review submitted medical articles
-                </p>
-
-            </div>
-
-            <div className="admin-grid">
-
-                {articles.map((article) => (
-
-                    <div
-                        className="admin-card"
-                        key={article._id}
-                    >
-
-                        <div className="status-badge">
-                            Pending Review
-                        </div>
-
-                        <h2>
-                            {article.title}
-                        </h2>
-
-                        <p>
-                            {article.content}
-                        </p>
-
-                        <div className="admin-buttons">
-
-                            <button
-                                className="approve-btn"
-                                onClick={() => approveArticle(article._id)}
-                            >
-                                ✅ Approve
-                            </button>
-
-                            <button
-                                className="reject-btn"
-                                onClick={() => rejectArticle(article._id)}
-                            >
-                                ❌ Reject
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                ))}
-
-            </div>
-
+            ))}
         </div>
     )
 }
