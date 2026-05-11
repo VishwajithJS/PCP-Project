@@ -1,45 +1,69 @@
 import { Link, useNavigate } from "react-router-dom"
-import { getUser } from "../utils/auth"
-import "../App.css"
 
 function Layout({ children }) {
 
-    const user = getUser()
     const navigate = useNavigate()
 
+    const role = localStorage.getItem("role")
+
     const logout = () => {
+
         localStorage.removeItem("token")
+        localStorage.removeItem("role")
+
         navigate("/")
     }
 
     return (
-        <div className="layout">
 
-            <div className="sidebar">
+        <div className="layout-container">
+
+            <aside className="sidebar">
 
                 <div>
-                    <div className="logo">🏥 MedKB</div>
 
-                    <Link to="/articles" className="nav-link">Articles</Link>
+                    <h2 className="logo">
+                        📖 MedKB
+                    </h2>
 
-                    {user?.role === "CONTRIBUTOR" && (
-                        <Link to="/dashboard" className="nav-link">Submit</Link>
-                    )}
+                    <p className="sidebar-role">
+                        {role}
+                    </p>
 
-                    {user?.role === "ADMIN" && (
-                        <Link to="/admin" className="nav-link">Admin Panel</Link>
-                    )}
+                    <nav className="sidebar-nav">
+
+                        <Link to="/articles" className="nav-link">
+                            📚 Articles
+                        </Link>
+
+                        {role === "CONTRIBUTOR" && (
+                            <Link to="/dashboard" className="nav-link">
+                                📝 Dashboard
+                            </Link>
+                        )}
+
+                        {role === "ADMIN" && (
+                            <Link to="/admin" className="nav-link">
+                                🛡 Admin Panel
+                            </Link>
+                        )}
+
+                    </nav>
+
                 </div>
 
-                <button className="logout-btn" onClick={logout}>
+                <button
+                    onClick={logout}
+                    className="logout-btn"
+                >
                     Logout
                 </button>
 
-            </div>
+            </aside>
 
-            <div className="content">
+            <main className="main-content">
                 {children}
-            </div>
+            </main>
 
         </div>
     )

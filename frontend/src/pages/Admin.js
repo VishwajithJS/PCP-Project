@@ -1,20 +1,26 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useEffect, useState } from "react"
-import "../App.css"
 
 function Admin() {
 
     const [articles, setArticles] = useState([])
+
     const token = localStorage.getItem("token")
 
     const fetchPending = async () => {
+
         try {
-            const res = await fetch("http://localhost:5000/api/articles/pending", {
-                headers: { "Authorization": `Bearer ${token}` }
-            })
+
+            const res = await fetch(
+                "https://pcp-project.onrender.com/api/articles/pending",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
 
             const data = await res.json()
+
             setArticles(data)
 
         } catch (err) {
@@ -24,28 +30,35 @@ function Admin() {
 
     useEffect(() => {
         fetchPending()
+        //eslint-disable-next-line
     }, [])
 
     const approve = async (id) => {
 
-        await fetch(`http://localhost:5000/api/articles/approve/${id}`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${token}`
+        await fetch(
+            `https://pcp-project.onrender.com/api/articles/approve/${id}${id}`,
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
-        })
+        )
 
         fetchPending()
     }
 
     const reject = async (id) => {
 
-        await fetch(`http://localhost:5000/api/articles/reject/${id}`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${token}`
+        await fetch(
+            `https://pcp-project.onrender.com/api/articles/reject/${id}${id}`,
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
-        })
+        )
 
         fetchPending()
     }
@@ -54,38 +67,70 @@ function Admin() {
 
         <div>
 
-            <h2>Admin Panel</h2>
+            <div className="admin-header">
 
-            {articles.length === 0 && (
-                <p>No pending articles</p>
-            )}
+                <h1 className="admin-title">
+                    Admin Approval Panel
+                </h1>
 
-            {articles.map(a => (
+                <p className="admin-subtitle">
+                    Review and manage submitted medical articles
+                </p>
 
-                <div key={a._id} className="card">
+            </div>
 
-                    <h3>{a.title}</h3>
+            {articles.length === 0 ? (
 
-                    <p>{a.content}</p>
-
-                    <button
-                        className="button success"
-                        onClick={() => approve(a._id)}
-                    >
-                        Approve
-                    </button>
-
-                    <button
-                        className="button danger"
-                        onClick={() => reject(a._id)}
-                        style={{ marginLeft: "10px" }}
-                    >
-                        Reject
-                    </button>
-
+                <div className="empty-box">
+                    No pending articles
                 </div>
 
-            ))}
+            ) : (
+
+                <div className="admin-grid">
+
+                    {articles.map((a) => (
+
+                        <div
+                            key={a._id}
+                            className="admin-card"
+                        >
+
+                            <div className="article-badge">
+                                Pending Review
+                            </div>
+
+                            <h2 className="article-title">
+                                {a.title}
+                            </h2>
+
+                            <p className="article-content">
+                                {a.content}
+                            </p>
+
+                            <div className="admin-actions">
+
+                                <button
+                                    className="approve-btn"
+                                    onClick={() => approve(a._id)}
+                                >
+                                    ✅ Approve
+                                </button>
+
+                                <button
+                                    className="reject-btn"
+                                    onClick={() => reject(a._id)}
+                                >
+                                    ❌ Reject
+                                </button>
+
+                            </div>
+
+                        </div>
+                    ))}
+
+                </div>
+            )}
 
         </div>
     )

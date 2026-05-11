@@ -6,7 +6,7 @@ function Articles() {
     const [articles, setArticles] = useState([])
 
     const fetchArticles = async () => {
-        const res = await fetch("http://localhost:5000/api/articles/published")
+        const res = await fetch("https://pcp-project.onrender.com/api/articles/published")
         const data = await res.json()
         setArticles(data)
     }

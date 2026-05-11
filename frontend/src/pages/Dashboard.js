@@ -1,67 +1,110 @@
 import { useState } from "react"
-import "../App.css"
 
 function Dashboard() {
 
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
+    const [message, setMessage] = useState("")
+
     const token = localStorage.getItem("token")
 
-    const submit = async () => {
-        await fetch("http://localhost:5000/api/articles", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({ title, content })
-        })
+    const submitArticle = async (e) => {
 
-        alert("Submitted for approval")
-        setTitle("")
-        setContent("")
+        e.preventDefault()
+
+        try {
+
+            const res = await fetch("https://pcp-project.onrender.com/api/articles", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    title,
+                    content
+                })
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                setMessage(data.message || "Failed")
+                return
+            }
+
+            setMessage("✅ Article submitted successfully")
+
+            setTitle("")
+            setContent("")
+
+        } catch (err) {
+
+            setMessage("❌ Server error")
+        }
     }
 
     return (
+
         <div>
 
-            <h2>Contributor Dashboard</h2>
+            <div className="dashboard-hero">
 
-            {/* Stats */}
-            <div className="stats">
-                <div className="stat-box">
-                    <div className="stat-title">Articles Submitted</div>
-                    <div className="stat-value">12</div>
+                <div>
+                    <h1 className="dashboard-title">
+                        Contributor Dashboard
+                    </h1>
+
+                    <p className="dashboard-subtitle">
+                        Submit medical knowledge articles for admin approval
+                    </p>
                 </div>
 
-                <div className="stat-box">
-                    <div className="stat-title">Pending</div>
-                    <div className="stat-value">5</div>
-                </div>
             </div>
 
-            {/* Form */}
-            <div className="card">
-                <h3>Submit Article</h3>
+            <div className="dashboard-card">
 
-                <input
-                    className="input"
-                    placeholder="Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+                <h2 className="form-heading">
+                    ✍ Submit New Article
+                </h2>
 
-                <textarea
-                    className="input"
-                    placeholder="Content"
-                    rows="5"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
+                <form
+                    onSubmit={submitArticle}
+                    className="modern-form"
+                >
 
-                <button className="button primary" onClick={submit}>
-                    Submit
-                </button>
+                    <input
+                        type="text"
+                        placeholder="Article Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="modern-input"
+                        required
+                    />
+
+                    <textarea
+                        placeholder="Write your article content..."
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        className="modern-textarea"
+                        required
+                    />
+
+                    <button
+                        type="submit"
+                        className="modern-btn"
+                    >
+                        🚀 Submit Article
+                    </button>
+
+                </form>
+
+                {message && (
+                    <p className="success-message">
+                        {message}
+                    </p>
+                )}
+
             </div>
 
         </div>
