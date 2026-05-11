@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import "../App.css"
 
 function Login() {
 
@@ -14,20 +13,25 @@ function Login() {
 
         e.preventDefault()
 
-        console.log("LOGIN BUTTON CLICKED")
+        setError("")
 
         try {
 
-            const res = await fetch("https://pcp-project.onrender.com", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            })
+            console.log("LOGIN BUTTON CLICKED")
+
+            const res = await fetch(
+                "https://pcp-project.onrender.com/api/auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }
+            )
 
             console.log("RAW RESPONSE:", res)
 
@@ -36,7 +40,6 @@ function Login() {
             console.log("LOGIN RESPONSE:", data)
 
             if (!res.ok) {
-
                 setError(data.message || "Login failed")
                 return
             }
@@ -77,7 +80,10 @@ function Login() {
                     Medical Knowledge Management System
                 </p>
 
-                <form onSubmit={submit} className="login-form">
+                <form
+                    onSubmit={submit}
+                    className="login-form"
+                >
 
                     <input
                         type="email"
@@ -116,7 +122,10 @@ function Login() {
 
                     Don’t have an account?
 
-                    <Link to="/register" className="register-link">
+                    <Link
+                        to="/register"
+                        className="register-link"
+                    >
                         Create New User
                     </Link>
 
