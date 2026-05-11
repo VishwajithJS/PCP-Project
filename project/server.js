@@ -11,16 +11,20 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.get("/", (req, res) => {
+    res.send("Knowledge Base API Running")
+})
+
 app.use("/api/auth", authRoutes)
 app.use("/api/articles", articleRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB Connected"))
-    .catch((err) => console.log(err))
-
-app.get("/", (req, res) => {
-    res.send("Backend Running")
-})
+    .then(() => {
+        console.log("MongoDB Connected")
+    })
+    .catch((err) => {
+        console.log(err)
+    })
 
 const PORT = process.env.PORT || 5000
 
