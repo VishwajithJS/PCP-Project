@@ -24,19 +24,22 @@ function Admin() {
             setArticles(data)
 
         } catch (err) {
+
             console.log(err)
         }
     }
 
     useEffect(() => {
+
         fetchPending()
+
     }, [])
 
     const approveArticle = async (id) => {
 
         try {
 
-            await fetch(
+            const res = await fetch(
                 `https://pcp-project.onrender.com/api/articles/approve/${id}`,
                 {
                     method: "PUT",
@@ -46,9 +49,14 @@ function Admin() {
                 }
             )
 
+            const data = await res.json()
+
+            console.log(data)
+
             fetchPending()
 
         } catch (err) {
+
             console.log(err)
         }
     }
@@ -57,7 +65,7 @@ function Admin() {
 
         try {
 
-            await fetch(
+            const res = await fetch(
                 `https://pcp-project.onrender.com/api/articles/reject/${id}`,
                 {
                     method: "PUT",
@@ -67,9 +75,14 @@ function Admin() {
                 }
             )
 
+            const data = await res.json()
+
+            console.log(data)
+
             fetchPending()
 
         } catch (err) {
+
             console.log(err)
         }
     }
@@ -79,23 +92,37 @@ function Admin() {
         <div className="admin-page">
 
             <div className="admin-header">
-                <h1>Admin Dashboard</h1>
-                <p>Review submitted medical articles</p>
+
+                <h1>
+                    Admin Dashboard
+                </h1>
+
+                <p>
+                    Review submitted medical articles
+                </p>
+
             </div>
 
             <div className="admin-grid">
 
                 {articles.map((article) => (
 
-                    <div className="admin-card" key={article._id}>
+                    <div
+                        className="admin-card"
+                        key={article._id}
+                    >
 
                         <div className="status-badge">
                             Pending Review
                         </div>
 
-                        <h2>{article.title}</h2>
+                        <h2>
+                            {article.title}
+                        </h2>
 
-                        <p>{article.content}</p>
+                        <p>
+                            {article.content}
+                        </p>
 
                         <div className="admin-buttons">
 
