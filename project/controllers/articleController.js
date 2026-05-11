@@ -1,63 +1,123 @@
 const Article = require("../models/Article")
 
-exports.createArticle = async (req,res)=>{
-try{
-const {title,content} = req.body
+// CREATE ARTICLE
+exports.createArticle = async (req, res) => {
 
-const article = new Article({
-title,
-content,
-author:req.user.id
-})
+    try {
 
-await article.save()
-res.status(201).json(article)
+        const { title, content } = req.body
 
-}catch(err){
-res.status(500).json({error:err.message})
-}
-}
+        const article = await Article.create({
+            title,
+            content,
+            status: "PENDING",
+            createdBy: req.user.id
+        })
 
-exports.getPendingArticles = async (req,res)=>{
-try{
-const articles = await Article.find({status:"PENDING"})
-res.json(articles)
-}catch(err){
-res.status(500).json({error:err.message})
-}
-}
+        res.status(201).json(article)
 
-exports.approveArticle = async (req,res)=>{
-try{
-const article = await Article.findByIdAndUpdate(
-req.params.id,
-{status:"APPROVED"},
-{new:true}
-)
-res.json(article)
-}catch(err){
-res.status(500).json({error:err.message})
-}
+    } catch (err) {
+
+        console.log(err)
+
+        res.status(500).json({
+            message: "Server Error"
+        })
+    }
 }
 
-exports.rejectArticle = async (req,res)=>{
-try{
-const article = await Article.findByIdAndUpdate(
-req.params.id,
-{status:"REJECTED"},
-{new:true}
-)
-res.json(article)
-}catch(err){
-res.status(500).json({error:err.message})
-}
+// GET APPROVED ARTICLES
+exports.getApprovedArticles = async (req, res) => {
+
+    try {
+
+        const articles = await Article.find({
+            status: "APPROVED"
+        })
+
+        res.json(articles)
+
+    } catch (err) {
+
+        console.log(err)
+
+        res.status(500).json({
+            message: "Server Error"
+        })
+    }
 }
 
-exports.getPublishedArticles = async (req,res)=>{
-try{
-const articles = await Article.find({status:"APPROVED"})
-res.json(articles)
-}catch(err){
-res.status(500).json({error:err.message})
+// GET PENDING ARTICLES
+exports.getPendingArticles = async (req, res) => {
+
+    try {
+
+        const articles = await Article.find({
+            status: "PENDING"
+        })
+
+        res.json(articles)
+
+    } catch (err) {
+
+        console.log(err)
+
+        res.status(500).json({
+            message: "Server Error"
+        })
+    }
 }
+
+// APPROVE ARTICLE
+exports.approveArticle = async (req, res) => {
+
+    try {
+
+        const article = await Article.findByIdAndUpdate(
+            req.params.id,
+            {
+                status: "APPROVED"
+            },
+            {
+                new: true
+            }
+        )
+
+        res.json(article)
+
+    } catch (err) {
+
+        console.log(err)
+
+        res.status(500).json({
+            message: "Approve failed"
+        })
+    }
+}
+
+// REJECT ARTICLE
+exports.rejectArticle = async (req, res) => {
+
+    try {
+
+        const article = await Article.findByIdAndUpdate(
+            req.params.id,
+            {
+                status: "REJECTED"
+            },
+            {
+                new: true
+            }
+        )
+
+        res.json(article)
+
+    } catch (err) {
+
+        console.log(err)
+
+        res.status(500).json({
+            message: "Reject failed"
+        })
+    }
 }

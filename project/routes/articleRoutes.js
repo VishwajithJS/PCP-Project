@@ -1,21 +1,48 @@
 const express = require("express")
-const router = express.Router()
 
-const articleController = require("../controllers/articleController")
+const {
+    createArticle,
+    getApprovedArticles,
+    getPendingArticles,
+    approveArticle,
+    rejectArticle
+} = require("../controllers/articleController")
+
 const authMiddleware = require("../middleware/authMiddleware")
 const roleMiddleware = require("../middleware/roleMiddleware")
 
-// Contributor
-router.post("/", authMiddleware, articleController.createArticle)
+const router = express.Router()
 
-// Admin
-router.get("/pending", authMiddleware, roleMiddleware("ADMIN"), articleController.getPendingArticles)
+router.post(
+    "/",
+    authMiddleware,
+    createArticle
+)
 
-router.put("/approve/:id", authMiddleware, roleMiddleware("ADMIN"), articleController.approveArticle)
+router.get(
+    "/approved",
+    getApprovedArticles
+)
 
-router.put("/reject/:id", authMiddleware, roleMiddleware("ADMIN"), articleController.rejectArticle)
+router.get(
+    "/pending",
+    authMiddleware,
+    roleMiddleware("ADMIN"),
+    getPendingArticles
+)
 
-// Public
-router.get("/published", articleController.getPublishedArticles)
+router.put(
+    "/approve/:id",
+    authMiddleware,
+    roleMiddleware("ADMIN"),
+    approveArticle
+)
+
+router.put(
+    "/reject/:id",
+    authMiddleware,
+    roleMiddleware("ADMIN"),
+    rejectArticle
+)
 
 module.exports = router
